@@ -1,0 +1,15 @@
+{
+  "Tenable":
+  {
+    "accessKey": "PUT ACCESS KEY HERE",
+    "secretKey": "PUT SECRET KEY HERE",
+    "scanName" : ["Scan#1","Scan#2","Etc..."]
+  },
+  "Jira":
+  {
+    "username": "PUT USERNAME HERE",
+    "password": "PUT PASSWORD HERE",
+    "jiraServer": "PUT SERVER HERE",
+    "projectID": "PUT PROJECT ID HERE"
+  }
+}
