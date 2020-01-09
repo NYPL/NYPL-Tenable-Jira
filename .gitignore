@@ -1,0 +1,13 @@
+#Don't track content of these folders
+__pycache__/
+.idea/
+
+#Temporary files
+*~
+*.swp
+*.swo
+*.pyc
+
+#Accessories
+jiraAPIToolset/
+tenableAPIToolset/
