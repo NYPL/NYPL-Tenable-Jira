@@ -11,3 +11,4 @@ __pycache__/
 #Accessories
 jiraAPIToolset/
 tenableAPIToolset/
+src/config.json
