@@ -1,16 +1,15 @@
 # NYPL-Tenable-Jira
+
 An automated ticketing system that processes scan reports streamed from Tenable REST APIs, reduces the data via
 nested dictionaries, and converts them into tickets through Jira REST APIs
+- Database and tables will be automatically generated.
 - Processes scan data supplied from Tenable REST APIs and eliminates redundancies via nested dictionaries, then stores this information into a SQL database
 - The data is grouped further based on a shared category, typically in scans, that would be the first word of an issue description; on some cases I would customize group names. This is up to your discretion. 
-- CSV files 
-- Grouped the data further based on a shared category and generated CSV files that captures all hosts pertaining to a
-particular issue stemming from a common group via Python
-• Built a ticketing system using Jira REST APIs that utilizes the grouped data and CSVs and produced a reduced ticket
-load from several thousand to approximately a dozen per scan type via Python and SQL
+- Ticketing system, built using Jira REST APIs, utilizes the grouped data and CSVs, check ifs tickets exists, if so, then updates it with latest attachments, otherwise it will create a new ticket.
+
 ## Requirements
 - Python 3.7 (Do not use Python 3.8!)
-- SQLITE 3.24.0
+- SQLITE 3.24.0+
 
 ## Dependencies
 - backcall==0.1.0
@@ -59,6 +58,11 @@ load from several thousand to approximately a dozen per scan type via Python and
 - **Arun Ajay** - [@arun-ajay](https://github.com/arun-ajay)
 
 See also the list of [contributors](https://github.com/NYPL/NYPL-Tenable-Jira/graphs/contributors) who participated in this project.
+
+## Acknowledgements
+- **Ho-Ling Poon** - [@holingpoon](https://github.com/holingpoon)
+- **Anne Pekarofski**
+- **Ashok Kumar**
 
 ## License
 This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/NYPL/NYPL-Tenable-Jira/blob/master/LICENSE) file for details
