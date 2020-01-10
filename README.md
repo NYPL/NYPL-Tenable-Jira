@@ -3,7 +3,7 @@ An automated ticketing system that processes scan reports streamed from Tenable 
 nested dictionaries, and converts them into tickets through Jira REST APIs
 - Processes scan data supplied from Tenable REST APIs and eliminates redundancies via nested dictionaries, then stores this information into a SQL database
 - The data is grouped further based on a shared category, typically in scans, that would be the first word of an issue description; on some cases I would customize group names. This is up to your discretion. 
-- CSV 
+- CSV files 
 - Grouped the data further based on a shared category and generated CSV files that captures all hosts pertaining to a
 particular issue stemming from a common group via Python
 • Built a ticketing system using Jira REST APIs that utilizes the grouped data and CSVs and produced a reduced ticket
@@ -57,8 +57,13 @@ load from several thousand to approximately a dozen per scan type via Python and
 
 ## Authors
 - **Arun Ajay** - [@arun-ajay](https://github.com/arun-ajay)
+
 See also the list of [contributors](https://github.com/NYPL/NYPL-Tenable-Jira/graphs/contributors) who participated in this project.
 
 ## License
 This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/NYPL/NYPL-Tenable-Jira/blob/master/LICENSE) file for details
+
+## References
+- [Tenable API Reference](https://developer.tenable.com/reference)
+- [Jira API Reference](https://jira.readthedocs.io/en/master/)
  
