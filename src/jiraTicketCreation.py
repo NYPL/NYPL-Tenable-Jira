@@ -4,28 +4,27 @@ from jira import JIRA
 import requests
 from src.config import Config
 import os.path
+import time
 
 configInformation = Config()
 scanNameList = configInformation.getTenableScanName()
+connection = sqlite3.connect(r"..\databases\Tenable_DB.db")
+cursor = connection.cursor()
+scanTicketMap = {}
 for scanName in scanNameList:
+    if scanName not in scanTicketMap:
+        scanTicketMap[scanName] = 0
     print()
     print("Creating tickets for",scanName)
     print()
     sqlScanName = scanName.replace("-", "_")
     #Get latest ticket Scan_Date
-    connection = sqlite3.connect(r"..\databases\Tenable_DB.db")
-    cursor = connection.cursor()
     cursor.execute("SELECT * FROM "+sqlScanName+"_HISTORY ORDER BY Scan_Date DESC")
     row = cursor.fetchone()
     creation_date = row[0]
     tenableStatus = row[1]
-    ticketStatus = row[2]
     if tenableStatus == 0:
-        print("Hash failed for",scanName,"on",creation_date,"retry again.")
-        connection.close()
-        continue
-    if ticketStatus == 1:
-        print("Hash have already been successfully created for",scanName,"on",creation_date)
+        print("Mapping failed for",scanName,"on",creation_date,"retry again.")
         continue
     print(creation_date)
     #Get data of latest Scan_Date (Critical or High only)
@@ -91,6 +90,7 @@ for scanName in scanNameList:
     print("Beginning Ticket Creation Process...")
 
     #Start creating CSVs of each problem group
+    ticketCount = 0
     for group,namedict in groupDictionary.items(): #get each namedict
         filename = '..\csv\\' + group + '.csv'
         # filename = './csv/'+group+'.csv'
@@ -118,17 +118,23 @@ for scanName in scanNameList:
             #If we do find it, update the csv file and description
             for issue in issuesList:
                 if (issue.raw['fields']["summary"] == group and (scanName in issue.raw['fields']['labels']) and ("Tenable" in issue.raw['fields']['labels'])):
-                # if (issue.raw['fields']["summary"] == group and issue.raw['fields']['labels'][0] == scanName and issue.raw['fields']['labels'][1] == 'Tenable'):
-                    print(group,"already exists. Updating ticket...")
+                    if (issue.raw['fields']["customfield_10202"] == creation_date):
+                        print(group, "already exists and has latest entry. Skipping.")
+                        created = True
+                        break
+                    print(group,"is outdated. Updating ticket...")
                     issueObj = jira.issue(issue.key)
                     for attachment in issueObj.fields.attachment:
                         jira.delete_attachment(attachment.id)
                     issueObj.update(notify=False, description=(str(count) + " unique problems as of " + creation_date))
                     issueObj.update(notify=False, fields={"customfield_10202":creation_date})
                     jira.add_attachment(issueObj,filename,filename=group+".csv")
+                    ticketCount += 1
                     created = True
                     break
             blockNum += 1
+            if created == True:
+                break
         #If we don't find the group, create a new ticket
         if created == False:
             print(group, "is new. Creating new ticket...")
@@ -147,16 +153,18 @@ for scanName in scanNameList:
             headers = {"X-Atlassian-Token": "nocheck"}
             files = {"file": open(filename,"rb")}
             r = requests.post(url,auth=(username,password), files=files, headers=headers)
-    ticketStatus = 1
-    sqlHistory = [creation_date,tenableStatus,ticketStatus]
-    sqlHistory = tuple(sqlHistory)
-    cursor.execute("DELETE FROM " + sqlScanName + "_HISTORY WHERE [Scan_Date] =?", (creation_date,))
-    cursor.execute("INSERT INTO " + sqlScanName + "_HISTORY (Scan_Date,Scan_Status,Tickets_Created) VALUES(?,?,?)",
-                   sqlHistory)
-    connection.commit()
-
+            ticketCount += 1
+    #Delete CSV Files
     csvpath = "..\csv"
     for root, dirs, files in os.walk(csvpath):
         for file in files:
-            os.remove(os.path.join(root, file))
-print("Done!")
+            if file != ".gitkeep":
+                os.remove(os.path.join(root, file))
+    scanTicketMap[scanName] = ticketCount
+connection.close()
+totalTicketCount = 0
+print()
+for scan,count in scanTicketMap.items():
+    print("Scan:",scan,"\tTickets Created:",count)
+    totalTicketCount += count
+print("Total Tickets Created:",totalTicketCount)
