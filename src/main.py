@@ -7,4 +7,4 @@ if __name__ == "__main__":
     print("\nData collection hashmap Complete\n--------------------")
     print("Initializing Jira Ticket Creation Process \n")
     import src.jiraTicketCreation
-    print("\nSuccess")
+    print("\nTicket Creation Process Complete")
