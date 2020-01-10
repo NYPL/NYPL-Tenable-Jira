@@ -1,7 +1,8 @@
 #Accessories
 jiraAPIToolset/
 tenableAPIToolset/
-
+csv/*.csv
+databases/*.db
 
 #Auto Ignore
 .idea/
