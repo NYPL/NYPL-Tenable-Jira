@@ -96,14 +96,8 @@ for scanName in scanNameList:
     except Exception as e:
         connection = sqlite3.connect(r"..\databases\Tenable_DB.db")
         cursor = connection.cursor()
-        if e == 'file':
-            print("Error: Scan is currently in progress. Cannot create tickets.")
-        else:
-            print("Error:",e)
-        print("Failed to upload all data for:", creation_date)
-        # Current sqlHistory: [creation_date,status]
+        print("Error scan still running")
         sqlHistory.append(0)  # append ticket_status - should be zero
-        # sqlHistory.append(status) #append creation_date for scan_status =, in the query
         sqlHistory = tuple(sqlHistory)
         cursor.execute("DELETE FROM " + sqlScanName + "_HISTORY WHERE [Scan_Date] =?", (creation_date,))
         cursor.execute("INSERT INTO " + sqlScanName + "_HISTORY (Scan_Date,Scan_Status,Tickets_Created) VALUES(?,?,?)",
@@ -111,7 +105,6 @@ for scanName in scanNameList:
         connection.commit()
         connection.close()
         continue
-    # print(file_id)
     ##
 
     ## Check Scan Export Status API -- gatekeeper
