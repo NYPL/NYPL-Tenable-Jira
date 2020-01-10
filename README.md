@@ -2,10 +2,10 @@
 
 An automated ticketing system that processes scan reports streamed from Tenable REST APIs, reduces the data via
 nested dictionaries, and converts them into tickets through Jira REST APIs
-- Database and tables will be automatically generated.
+- Database and tables will be automatically generated
 - Processes scan data supplied from Tenable REST APIs and eliminates redundancies via nested dictionaries, then stores this information into a SQL database
-- The data is grouped further based on a shared category, typically in scans, that would be the first word of an issue description; on some cases I would customize group names. This is up to your discretion. 
-- Ticketing system, built using Jira REST APIs, utilizes the grouped data and CSVs, check ifs tickets exists, if so, then updates it with latest attachments, otherwise it will create a new ticket.
+- The data is grouped further based on a shared category, typically in scans, that would be the first word of an issue description; on some cases I would customize group names. This is up to your discretion
+- Ticketing system, built using Jira REST APIs, utilizes the grouped data and CSVs, check ifs tickets exists, if so, then updates it with latest attachments, otherwise it will create a new ticket
 
 ## Requirements
 - Python 3.7 (Do not use Python 3.8!)
