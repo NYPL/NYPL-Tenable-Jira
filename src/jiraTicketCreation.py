@@ -127,7 +127,7 @@ for scanName in scanNameList:
                     for attachment in issueObj.fields.attachment:
                         jira.delete_attachment(attachment.id)
                     issueObj.update(notify=False, description=(str(count) + " unique problems as of " + creation_date))
-                    # issueObj.update(notify=False, fields={"customfield_10202":creation_date})
+                    issueObj.update(notify=False, fields={"customfield_10202":creation_date})
                     jira.add_attachment(issueObj,filename,filename=group+".csv")
                     ticketCount += 1
                     created = True
@@ -145,7 +145,7 @@ for scanName in scanNameList:
             issuedict['issuetype'] = {'name': 'Bug'}
             issuedict['priority'] = {'name': 'Highest'}
             issuedict['labels'] = [scanName,"Tenable"]
-            # issuedict['customfield_10202'] = creation_date #Scan Date custom field
+            issuedict['customfield_10202'] = creation_date #Scan Date custom field
             issue = jira.create_issue(fields = issuedict)
             # issue.update(fields={"labels":["Tenable",scanName]})
             issueID = issue.id
